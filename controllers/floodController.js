@@ -1,4 +1,4 @@
-const Flood = require('../models/flood');
+const Flood = require('../models/floodModel');
 
 exports.createFloodReport = async (req, res) => {
     const { location, severity, description, date } = req.body;
