@@ -4,9 +4,9 @@ const User = require('../models/userModel');
 
 const registerUser = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { name, email, password } = req.body;
 
-        if (!username || !email || !password) {
+        if (!name || !email || !password) {
             return res.status(400).json({ message: 'Please provide all required fields' });
         }
 
@@ -16,14 +16,17 @@ const registerUser = async (req, res) => {
         }
 
         const newUser = new User({
-            username,
+            name,
             email,
             password, 
         });
 
         await newUser.save();
         const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(201).json({ message: 'User registered successfully', token });
+        res.status(201).json({ 
+            message: 'User registered successfully', 
+            data: { user: newUser, token } 
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
@@ -50,7 +53,10 @@ const loginUser = async (req, res) => {
 
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ message: 'User logged in successfully', token });
+        res.status(200).json({ 
+            message: 'User logged in successfully', 
+            data: { user, token } 
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });

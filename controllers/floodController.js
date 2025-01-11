@@ -19,7 +19,7 @@ exports.createFloodReport = async (req, res) => {
 
 exports.getAllFloodReports = async (req, res) => {
     try {
-        const floods = await Flood.find().populate('user', 'username email').select('-__v');
+        const floods = await Flood.find().populate('user', 'name email').select('-__v');
         res.status(200).json(floods);
     } catch (error) {
         res.status(500).json({ message: error.message });
